@@ -4,7 +4,7 @@ from app.storage.airtable import append_to_airtable
 from app.storage.notion import append_to_notion
 from typing import Optional
 from datetime import datetime
-from security import verify_access_key
+from .security import verify_access_key
 
 router = APIRouter()
 
