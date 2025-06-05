@@ -1,14 +1,15 @@
-from fastapi import APIRouter, Request, HTTPException, Query
+from fastapi import APIRouter, Request, HTTPException, Query, Depends
 from app.storage.sheet_utils import append_to_sheet
 from app.storage.airtable import append_to_airtable
 from app.storage.notion import append_to_notion
 from typing import Optional
 from datetime import datetime
+from security import verify_access_key
 
 router = APIRouter()
 
 @router.post("/webhook")
-async def whatsapp_webhook(request: Request, type: Optional[str] = Query("sheet")):
+async def whatsapp_webhook(request: Request, type: Optional[str] = Query("sheet"), _: None = Depends(verify_access_key)):
     form = await request.form()
     sender = form.get("From")
     body = form.get("Body")

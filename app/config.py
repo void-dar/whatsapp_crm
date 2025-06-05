@@ -5,7 +5,7 @@ load_dotenv()
 
 
 class Settings(BaseSettings):
-    APP_SECRET_KEY: str
+    ACCESS_KEY: str
 
     # Twilio
     TWILIO_ACCOUNT_SID: str
