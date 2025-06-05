@@ -1,6 +1,5 @@
 from pydantic_settings import BaseSettings
 from dotenv import load_dotenv
-from pathlib import Path
 
 load_dotenv()
 
@@ -14,7 +13,7 @@ class Settings(BaseSettings):
     TWILIO_WHATSAPP_NUMBER: str
 
     # Google Sheets
-    GOOGLE_SERVICE_ACCOUNT_FILE: Path
+    GOOGLE_SERVICE_ACCOUNT_KEY: str
     GOOGLE_SHEET_ID: str
 
     # Airtable (optional)
