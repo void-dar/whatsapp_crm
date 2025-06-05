@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Request, HTTPException, Query, Depends
+from fastapi import APIRouter, Request, HTTPException, Query, Depends, status
 from app.storage.sheet_utils import append_to_sheet
 from app.storage.airtable import append_to_airtable
 from app.storage.notion import append_to_notion
@@ -8,15 +8,15 @@ from .security import verify_access_key
 
 router = APIRouter()
 
-@router.post("/webhook")
-async def whatsapp_webhook(request: Request, type: Optional[str] = Query("sheet"), _: None = Depends(verify_access_key)):
+@router.post("/webhook", status_code=status.HTTP_202_ACCEPTED)
+async def whatsapp_webhook(request: Request, type: str = Query(default="sheet"), _: None = Depends(verify_access_key)):
     form = await request.form()
     sender = form.get("From")
     body = form.get("Body")
     date = datetime.now().isoformat()
 
     if not sender or not body:
-        raise HTTPException(status_code=400, detail="Invalid message")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid message")
 
     if type == "sheet":
         append_to_sheet([sender, body, date])
@@ -27,4 +27,4 @@ async def whatsapp_webhook(request: Request, type: Optional[str] = Query("sheet"
     if type == "notion":
         append_to_notion(body, sender, date)
 
-    return "Message received"
+    return {"Event": "Message received"}
