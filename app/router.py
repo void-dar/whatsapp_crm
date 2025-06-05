@@ -28,3 +28,7 @@ async def whatsapp_webhook(request: Request, type: str = Query(default="sheet"),
         append_to_notion(body, sender, date)
 
     return {"Event": "Message received"}
+
+@router.get("/", status_code=status.HTTP_202_ACCEPTED)
+async def test_connection():
+    return status.HTTP_200_OK
